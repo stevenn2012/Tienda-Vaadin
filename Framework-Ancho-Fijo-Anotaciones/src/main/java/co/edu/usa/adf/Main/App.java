@@ -14,15 +14,15 @@ import co.edu.usa.adf.tomates.Venta;
 public class App {
 	
 
-	private static String[] rutasDescriptores = {/*
+	private static String[] rutasDescriptores = {
 			"Datos/Descriptores/Descriptor_Contacto.txt",
 			"Datos/Descriptores/Descriptor_Evento.txt",
 			"Datos/Descriptores/Descriptor_Contacto2.txt",
 			"Datos/Descriptores/Descriptor_Pais.txt",
 			"Datos/Descriptores/Descriptor_Pelicula.txt",
-			"Datos/Descriptores/Descriptor_Series.txt",*/
-			"Datos/Descriptores/Descriptor_Producto.txt"/*,
-			"Datos/Descriptores/Descriptor_Venta.txt"*/
+			"Datos/Descriptores/Descriptor_Series.txt",
+			"Datos/Descriptores/Descriptor_Producto.txt",
+			"Datos/Descriptores/Descriptor_Venta.txt"
 	};
 	
 	public static void main(String[] args) {
@@ -52,16 +52,15 @@ public class App {
 	}
 	
 	private static void correrFramework(String descriptor) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException, IOException, ParseException {
-		System.out.println("Inicio------------------------------------------------------------------>");
 		franfia<Object> prueba = new franfia<Object>(descriptor);
-		//prueba.add(new Producto("PRODU00001", "Mi Nuevo Producto", "Mi nuevo producto descripcion", 1000000.00, "c://holamundo.jpg", 254));
-		ArrayList<Object> datos = prueba.leerArchivo();
+		imprimirLista(prueba.leerArchivo());
+		prueba.escribirArchivo(false);
+		System.out.println("------------------------------------------------------------------------>\n");
+	}
+	
+	private static void imprimirLista(ArrayList<Object> datos) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException, IOException, ParseException{
 		for (int i = 0; i < datos.size(); i++) {
 			System.out.println(datos.get(i));
 		}
-		
-		System.out.println("Guardando--------------------------------------------------------------->");
-		prueba.escribirArchivo(false);
-		System.out.println("------------------------------------------------------------------------>\n");
 	}
 }
