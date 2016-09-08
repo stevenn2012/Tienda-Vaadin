@@ -163,7 +163,7 @@ public class franfia<T> {
 						info+=String.format("%1$-"+datosAtributos.get(j).getAncho()+"s", formato.format(m.invoke(datos.get(i))));
 					}
 				}
-				//System.out.println("Guardando --> "+info);
+				System.out.println("Guardando --> "+info);
 				escribir.write(info);
 				escribir.newLine();
 			}

@@ -3,13 +3,8 @@ package co.edu.usa.adf.Main;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-
 import co.edu.usa.adf.Framework_Ancho_Fijo_Anotaciones.franfia;
-import co.edu.usa.adf.tomates.Producto;
-import co.edu.usa.adf.tomates.Venta;
 
 public class App {
 	
