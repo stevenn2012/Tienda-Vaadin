@@ -8,10 +8,20 @@ public class Contacto{
 	@FixedWidthField(posicion=2, width=30) String email;
 	@FixedWidthField(posicion=3, width=50) String direccion;
 	@FixedWidthField(posicion=4, width= 3) Integer edad;
-	@FixedWidthField(posicion=5, width=15) long cedula;
+	@FixedWidthField(posicion=5, width=10) long cedula;
 	
 	public Contacto() {
 		
+	}
+
+	public Contacto(String nombre, String celular, String email, String direccion, Integer edad, long cedula) {
+		super();
+		this.nombre = nombre;
+		this.celular = celular;
+		this.email = email;
+		this.direccion = direccion;
+		this.edad = edad;
+		this.cedula = cedula;
 	}
 
 	public String getNombre() {

@@ -9,12 +9,12 @@ public class App {
 	
 
 	private static String[] rutasDescriptores = {
-			"Datos/Descriptores/Descriptor_Contacto.txt",
+			"Datos/Descriptores/Descriptor_Contacto.txt"/*,
 			"Datos/Descriptores/Descriptor_Evento.txt",
 			"Datos/Descriptores/Descriptor_Contacto2.txt",
 			"Datos/Descriptores/Descriptor_Pais.txt",
 			"Datos/Descriptores/Descriptor_Pelicula.txt",
-			"Datos/Descriptores/Descriptor_Series.txt"
+			"Datos/Descriptores/Descriptor_Series.txt"*/
 	};
 	
 	public static void main(String[] args) {
@@ -45,7 +45,7 @@ public class App {
 	
 	private static void correrFramework(String descriptor) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException, IOException, ParseException {
 		System.out.println("Inicio------------------------------------------------------------------>");
-		franfia prueba = new franfia(descriptor);
+		franfia<Object> prueba = new franfia<Object>(descriptor);
 		ArrayList<Object> datos = prueba.leerArchivo();
 		for (int i = 0; i < datos.size(); i++) {
 			System.out.println(datos.get(i));

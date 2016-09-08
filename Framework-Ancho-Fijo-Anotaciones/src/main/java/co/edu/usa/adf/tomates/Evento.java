@@ -13,6 +13,13 @@ public class Evento {
 	
 	}
 
+	public Evento(String nombre, Date fecha, String descripcion) {
+		super();
+		this.nombre = nombre;
+		this.fecha = fecha;
+		this.descripcion = descripcion;
+	}
+
 	public String getNombre() {
 		return nombre;
 	}
