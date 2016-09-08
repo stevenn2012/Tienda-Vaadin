@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-public class franfia {
+public class franfia<T> {
 
 	private String nombreClase;
 	private String rutaArchivo;
 	private String rutaGuardar;
 	private HashMap<Integer, AtribDat> datosAtributos = new HashMap<Integer, AtribDat>();
-	private ArrayList<Object> datos = new ArrayList<Object>();
+	private ArrayList<T> datos = new ArrayList<T>();
 	
 	public franfia(String rutaDescriptor) throws IOException, ClassNotFoundException{
 		BufferedReader leer= new BufferedReader(new FileReader(rutaDescriptor));
@@ -38,8 +38,9 @@ public class franfia {
 		}
 	}
 	
-	public ArrayList<Object> leerArchivo() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException, ParseException{
-		ArrayList<Object> datos = new ArrayList<Object>();
+	@SuppressWarnings("unchecked")
+	public ArrayList<T> leerArchivo() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException, ParseException{
+		ArrayList<T> datos = new ArrayList<T>();
 		BufferedReader leer = new BufferedReader(new FileReader(rutaArchivo));
 		Class<?> cls = Class.forName(nombreClase);
 		String cadena="";
@@ -59,7 +60,7 @@ public class franfia {
 				Method m = cls.getMethod("set"+datAtrib.getNombre(), datMethod.getClase());
 				m.invoke(inst, datMethod.getDato());
 			}
-			datos.add(inst);
+			datos.add(validarObjeto((T)inst));
 		}
 		leer.close();
 		this.datos=datos;
@@ -143,8 +144,10 @@ public class franfia {
 		}
 	}
 
-	public void escribirArchivo() throws IOException, NoSuchMethodException, SecurityException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
-		datos=reordenarArray(datos);
+	public void escribirArchivo(boolean reOrdenar) throws IOException, NoSuchMethodException, SecurityException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		if(reOrdenar){
+			datos=reordenarArray(datos);
+		}
 		Class<?> cls = Class.forName(nombreClase);
 		BufferedWriter escribir = new BufferedWriter(new FileWriter(rutaGuardar));
 			for (int i = 0; i < datos.size(); i++) {
@@ -165,7 +168,7 @@ public class franfia {
 		escribir.close();
 	}
 	
-	public ArrayList<Object> reordenarArray(ArrayList<Object> datos){
+	public ArrayList<T> reordenarArray(ArrayList<T> datos){
 		for (int i = 0; i < (datos.size()/2); i++) {
 			//System.out.println("Cambiando posicion --> "+datos.get(i));
 			datos.add(datos.remove(i));
@@ -173,11 +176,14 @@ public class franfia {
 		return datos;
 	}
 
-	public ArrayList<Object> getDatos() {
+	public ArrayList<T> getDatos() {
 		return datos;
 	}
 
-	public void setDatos(ArrayList<Object> datos) {
+	public void setDatos(ArrayList<T> datos) throws ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ParseException {
+		for (int i = 0; i < datos.size(); i++) {
+			datos.add((T)validarObjeto(datos.remove(i)));
+		}
 		this.datos = datos;
 	}
 	
@@ -185,11 +191,36 @@ public class franfia {
 		return datos.get(i);
 	}
 
-	public void setDatos(int i, Object dato) {
-		this.datos.set(i, dato);
+	public void setDatos(int i, T dato) throws ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ParseException {
+		this.datos.set(i, validarObjeto(dato));
 	}
 	
-	public void add(Object dato) {
-		this.datos.add(dato);
+	public void add(T dato) throws ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ParseException {
+		this.datos.add(validarObjeto(dato));
+	}
+	
+	private T validarObjeto(T dato) throws ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ParseException{
+		Class<?> cls = Class.forName(nombreClase);
+		for (int i = 0; i < datosAtributos.size(); i++) {
+			Method m = cls.getMethod("get"+datosAtributos.get(i).getNombre());
+			String info = m.invoke(dato)+"";
+			int n = info.length();
+			if(n>datosAtributos.get(i).getAncho() && !datosAtributos.get(i).getTipo().equalsIgnoreCase("date")){
+				info=info.substring(0, datosAtributos.get(i).getAncho());
+				retorno datMethod = getClass(datosAtributos.get(i).getTipo(), info);
+				m = cls.getMethod("set"+datosAtributos.get(i).getNombre(), datMethod.getClase());
+				m.invoke(dato, datMethod.getDato());
+			}
+		}
+		return dato;
+	}
+	
+	public boolean remove(int i){
+		try {
+			datos.remove(i);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 }
