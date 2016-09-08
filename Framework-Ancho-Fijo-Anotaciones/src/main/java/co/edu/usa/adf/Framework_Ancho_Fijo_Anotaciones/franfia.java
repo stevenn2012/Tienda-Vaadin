@@ -60,7 +60,7 @@ public class franfia<T> {
 				Method m = cls.getMethod("set"+datAtrib.getNombre(), datMethod.getClase());
 				m.invoke(inst, datMethod.getDato());
 			}
-			datos.add((T)inst);
+			datos.add(validarObjeto((T)inst));
 		}
 		leer.close();
 		this.datos=datos;
@@ -203,7 +203,7 @@ public class franfia<T> {
 			Method m = cls.getMethod("get"+datosAtributos.get(i).getNombre());
 			String info = m.invoke(dato)+"";
 			int n = info.length();
-			if(n>datosAtributos.get(i).getAncho()){
+			if(n>datosAtributos.get(i).getAncho() && !datosAtributos.get(i).getTipo().equalsIgnoreCase("date")){
 				info=info.substring(0, datosAtributos.get(i).getAncho());
 				retorno datMethod = getClass(datosAtributos.get(i).getTipo(), info);
 				m = cls.getMethod("set"+datosAtributos.get(i).getNombre(), datMethod.getClase());
