@@ -10,8 +10,10 @@ import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Random;
 
 public class franfia<T> {
 
@@ -67,7 +69,7 @@ public class franfia<T> {
 		return datos;
 	}
 	
-	public retorno getClass(String tipo, String dato) throws ParseException{
+	private retorno getClass(String tipo, String dato) throws ParseException{
 		Class<?> cls = null;
 		Object d = null;
 		if(tipo.equalsIgnoreCase("boolean")){
@@ -118,7 +120,7 @@ public class franfia<T> {
 		return new retorno(cls, d);
 	}
 
-	public class retorno{
+	private class retorno{
 		private Class<?> clase;
 		private Object dato;
 		
@@ -131,16 +133,8 @@ public class franfia<T> {
 			return clase;
 		}
 
-		public void setClase(Class<?> clase) {
-			this.clase = clase;
-		}
-
 		public Object getDato() {
 			return dato;
-		}
-
-		public void setDato(Object dato) {
-			this.dato = dato;
 		}
 	}
 
@@ -168,11 +162,14 @@ public class franfia<T> {
 		escribir.close();
 	}
 	
-	public ArrayList<T> reordenarArray(ArrayList<T> datos){
-		for (int i = 0; i < (datos.size()/2); i++) {
+	private ArrayList<T> reordenarArray(ArrayList<T> datos){
+		/*for (int i = 0; i < (datos.size()/2); i++) {
 			//System.out.println("Cambiando posicion --> "+datos.get(i));
 			datos.add(datos.remove(i));
-		}
+		}*/
+		Random rndm = new Random();
+        rndm.setSeed(1000);
+        Collections.shuffle(datos, rndm);
 		return datos;
 	}
 
@@ -187,11 +184,11 @@ public class franfia<T> {
 		this.datos = datos;
 	}
 	
-	public Object getDato(int i) {
+	public T getDato(int i) {
 		return datos.get(i);
 	}
 
-	public void setDatos(int i, T dato) throws ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ParseException {
+	public void setDato(int i, T dato) throws ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ParseException {
 		this.datos.set(i, validarObjeto(dato));
 	}
 	
@@ -215,12 +212,7 @@ public class franfia<T> {
 		return dato;
 	}
 	
-	public boolean remove(int i){
-		try {
-			datos.remove(i);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
+	public void remove(int i){
+		datos.remove(i);
 	}
 }

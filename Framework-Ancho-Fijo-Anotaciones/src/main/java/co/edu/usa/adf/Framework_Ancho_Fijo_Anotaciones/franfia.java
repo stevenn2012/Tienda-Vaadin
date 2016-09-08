@@ -10,8 +10,10 @@ import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Random;
 
 public class franfia<T> {
 
@@ -161,10 +163,13 @@ public class franfia<T> {
 	}
 	
 	private ArrayList<T> reordenarArray(ArrayList<T> datos){
-		for (int i = 0; i < (datos.size()/2); i++) {
+		/*for (int i = 0; i < (datos.size()/2); i++) {
 			//System.out.println("Cambiando posicion --> "+datos.get(i));
 			datos.add(datos.remove(i));
-		}
+		}*/
+		Random rndm = new Random();
+        rndm.setSeed(1000);
+        Collections.shuffle(datos, rndm);
 		return datos;
 	}
 

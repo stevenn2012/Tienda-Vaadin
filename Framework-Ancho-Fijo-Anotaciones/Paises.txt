@@ -1,9 +1,9 @@
-Peru          Lima          
-Chile         Santiago      
+Venezuela     Caracas       
 Ecuador       Quito         
-Japon         Tokio         
 China         Pekin         
 Colombia      Bogota        
 Argentina     Buenos Aires  
 Brasil        Brasilia      
-Venezuela     Caracas       
+Chile         Santiago      
+Peru          Lima          
+Japon         Tokio         
