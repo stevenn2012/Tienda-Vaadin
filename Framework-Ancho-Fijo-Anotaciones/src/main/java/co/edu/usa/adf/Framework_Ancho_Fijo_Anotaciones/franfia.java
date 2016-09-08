@@ -144,8 +144,10 @@ public class franfia<T> {
 		}
 	}
 
-	public void escribirArchivo() throws IOException, NoSuchMethodException, SecurityException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
-		datos=reordenarArray(datos);
+	public void escribirArchivo(boolean reOrdenar) throws IOException, NoSuchMethodException, SecurityException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		if(reOrdenar){
+			datos=reordenarArray(datos);
+		}
 		Class<?> cls = Class.forName(nombreClase);
 		BufferedWriter escribir = new BufferedWriter(new FileWriter(rutaGuardar));
 			for (int i = 0; i < datos.size(); i++) {
@@ -211,5 +213,14 @@ public class franfia<T> {
 			}
 		}
 		return dato;
+	}
+	
+	public boolean remove(int i){
+		try {
+			datos.remove(i);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 }

@@ -1,11 +1,11 @@
-package co.edu.usa.adf.Framework_Ancho_Fijo_Anotaciones;
+package co.edu.usa.adf.Main;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.ArrayList;
 
-import co.edu.usa.adf.tomates.Contacto;
+import co.edu.usa.adf.Framework_Ancho_Fijo_Anotaciones.franfia;
 
 public class App {
 	
@@ -53,7 +53,7 @@ public class App {
 			System.out.println(datos.get(i));
 		}
 		System.out.println("Guardando--------------------------------------------------------------->");
-		prueba.escribirArchivo();
+		prueba.escribirArchivo(true);
 		System.out.println("------------------------------------------------------------------------>\n");
 	}
 }
