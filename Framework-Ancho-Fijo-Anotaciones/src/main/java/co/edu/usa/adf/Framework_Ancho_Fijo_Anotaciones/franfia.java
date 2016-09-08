@@ -18,8 +18,8 @@ import java.util.Random;
 public class franfia<T> {
 
 	private String nombreClase;
-	private String rutaArchivo;
-	private String rutaGuardar;
+	public String rutaArchivo;
+	public String rutaGuardar;
 	private HashMap<Integer, AtribDat> datosAtributos = new HashMap<Integer, AtribDat>();
 	private ArrayList<T> datos = new ArrayList<T>();
 	
@@ -42,7 +42,6 @@ public class franfia<T> {
 	
 	@SuppressWarnings("unchecked")
 	public ArrayList<T> leerArchivo() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException, ParseException{
-		ArrayList<T> datos = new ArrayList<T>();
 		BufferedReader leer = new BufferedReader(new FileReader(rutaArchivo));
 		Class<?> cls = Class.forName(nombreClase);
 		String cadena="";
@@ -52,12 +51,11 @@ public class franfia<T> {
 			for (int i = 0; i < indexAtrib; i++) {
 				AtribDat datAtrib = datosAtributos.get(i);
 				String info="";
-				if(i==(indexAtrib-1)){
-					info = cadena.substring(0, datAtrib.getAncho()).trim();
-				}else{
-					info = cadena.substring(0, datAtrib.getAncho()-1).trim();
-				}
+				info = cadena.substring(0, datAtrib.getAncho()).trim();
 				cadena= cadena.substring(datAtrib.getAncho());
+				if(datosAtributos.get(i).getTipo().equalsIgnoreCase("date")){
+					dateSize = datosAtributos.get(i).getAncho();
+				}
 				retorno datMethod = getClass(datAtrib.getTipo(), info);
 				Method m = cls.getMethod("set"+datAtrib.getNombre(), datMethod.getClase());
 				m.invoke(inst, datMethod.getDato());
@@ -65,10 +63,10 @@ public class franfia<T> {
 			datos.add(validarObjeto((T)inst));
 		}
 		leer.close();
-		this.datos=datos;
 		return datos;
 	}
 	
+	private int dateSize=10;
 	private retorno getClass(String tipo, String dato) throws ParseException{
 		Class<?> cls = null;
 		Object d = null;
@@ -114,7 +112,12 @@ public class franfia<T> {
 		
 		if(tipo.equalsIgnoreCase("date")){
 			cls = Date.class;
-			SimpleDateFormat formato = new SimpleDateFormat("yyyy/MM/dd");
+			SimpleDateFormat formato=null;
+			if(dateSize==10){
+				formato = new SimpleDateFormat("yyyy/MM/dd");
+			}else{
+				formato = new SimpleDateFormat("yyyy/MM/dd/hh:mm:ss:SSS");
+			}
 		    d = formato.parse(dato);	     
 		}
 		return new retorno(cls, d);
@@ -151,11 +154,16 @@ public class franfia<T> {
 					if(!datosAtributos.get(j).getTipo().equalsIgnoreCase("date")){
 						info+=String.format("%1$-"+datosAtributos.get(j).getAncho()+"s", m.invoke(datos.get(i)));
 					}else{
-						SimpleDateFormat formato = new SimpleDateFormat("yyyy/MM/dd");
+						SimpleDateFormat formato = null;
+						if(datosAtributos.get(j).getAncho()==10){
+							formato = new SimpleDateFormat("yyyy/MM/dd");
+						}else{
+							formato = new SimpleDateFormat("yyyy/MM/dd/hh:mm:ss:SSS");
+						}
 						info+=String.format("%1$-"+datosAtributos.get(j).getAncho()+"s", formato.format(m.invoke(datos.get(i))));
 					}
 				}
-				System.out.println("Guardando --> "+info);
+				//System.out.println("Guardando --> "+info);
 				escribir.write(info);
 				escribir.newLine();
 			}
@@ -214,5 +222,21 @@ public class franfia<T> {
 	
 	public void remove(int i){
 		datos.remove(i);
+	}
+
+	public String getRutaArchivo() {
+		return rutaArchivo;
+	}
+
+	public void setRutaArchivo(String rutaArchivo) {
+		this.rutaArchivo = rutaArchivo;
+	}
+
+	public String getRutaGuardar() {
+		return rutaGuardar;
+	}
+
+	public void setRutaGuardar(String rutaGuardar) {
+		this.rutaGuardar = rutaGuardar;
 	}
 }

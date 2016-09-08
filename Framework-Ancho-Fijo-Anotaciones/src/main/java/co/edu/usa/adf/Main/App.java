@@ -3,20 +3,26 @@ package co.edu.usa.adf.Main;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import co.edu.usa.adf.Framework_Ancho_Fijo_Anotaciones.franfia;
+import co.edu.usa.adf.tomates.Producto;
+import co.edu.usa.adf.tomates.Venta;
 
 public class App {
 	
 
-	private static String[] rutasDescriptores = {
+	private static String[] rutasDescriptores = {/*
 			"Datos/Descriptores/Descriptor_Contacto.txt",
 			"Datos/Descriptores/Descriptor_Evento.txt",
 			"Datos/Descriptores/Descriptor_Contacto2.txt",
 			"Datos/Descriptores/Descriptor_Pais.txt",
 			"Datos/Descriptores/Descriptor_Pelicula.txt",
-			"Datos/Descriptores/Descriptor_Series.txt"
+			"Datos/Descriptores/Descriptor_Series.txt",*/
+			"Datos/Descriptores/Descriptor_Producto.txt"/*,
+			"Datos/Descriptores/Descriptor_Venta.txt"*/
 	};
 	
 	public static void main(String[] args) {
@@ -48,12 +54,14 @@ public class App {
 	private static void correrFramework(String descriptor) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException, IOException, ParseException {
 		System.out.println("Inicio------------------------------------------------------------------>");
 		franfia<Object> prueba = new franfia<Object>(descriptor);
+		//prueba.add(new Producto("PRODU00001", "Mi Nuevo Producto", "Mi nuevo producto descripcion", 1000000.00, "c://holamundo.jpg", 254));
 		ArrayList<Object> datos = prueba.leerArchivo();
 		for (int i = 0; i < datos.size(); i++) {
 			System.out.println(datos.get(i));
 		}
+		
 		System.out.println("Guardando--------------------------------------------------------------->");
-		prueba.escribirArchivo(true);
+		prueba.escribirArchivo(false);
 		System.out.println("------------------------------------------------------------------------>\n");
 	}
 }

@@ -6,7 +6,7 @@ import co.edu.usa.adf.Framework_Ancho_Fijo_Anotaciones.FixedWidthField;
 public class Pelicula {
 	
 	@FixedWidthField(posicion=0, width=30)String nombre;
-	@FixedWidthField(posicion=1, width=15)Date fechaEstreno;
+	@FixedWidthField(posicion=1, width=10)Date fechaEstreno;
 	@FixedWidthField(posicion=2, width=4)double puntaje;
 	@FixedWidthField(posicion=3, width=6)boolean ganoOscar;
 	

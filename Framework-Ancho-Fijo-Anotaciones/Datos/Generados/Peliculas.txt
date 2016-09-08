@@ -1,0 +1,14 @@
+Black Swan                    2010/12/178.0 false 
+Inside Out                    2015/06/188.3 true  
+Wall-E                        2008/06/278.4 true  
+The Revenant                  2016/02/048.1 false 
+Spotlight                     2015/11/258.1 true  
+Easy A                        2010/09/177.1 false 
+Spirited Away                 2001/11/078.6 true  
+Joy                           2016/01/076.6 false 
+Ex Machina                    2015/01/217.7 false 
+Carol                         2015/02/047.3 false 
+The Danish Girl               2015/01/017.0 false 
+The Theory of Everything      2015/01/087.7 false 
+Mad Max: Fury Road            2015/05/148.1 false 
+The Godfather                 1972/03/249.2 true  
