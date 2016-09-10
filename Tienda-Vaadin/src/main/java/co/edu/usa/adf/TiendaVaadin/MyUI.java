@@ -1,5 +1,6 @@
 package co.edu.usa.adf.TiendaVaadin;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.annotation.WebServlet;
@@ -13,12 +14,14 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import co.edu.usa.adf.datos.Producto;
+import co.edu.usa.adf.datos.Venta;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window 
@@ -38,6 +41,8 @@ public class MyUI extends UI {
 	private TextField filterText = new TextField();
 	private ProductoForm form = new ProductoForm(this);
 
+	private  Grid ventaGrid = new Grid();
+	
 	private boolean nuevoActivo = false;
 	
     @Override
@@ -62,17 +67,19 @@ public class MyUI extends UI {
         filtering.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
         filtering.addComponents(filterText, clearFilterTextBtn);     
         
-        HorizontalLayout main = new HorizontalLayout(grid, form);
+        HorizontalLayout main = new HorizontalLayout( grid, form);
         
         main.setSpacing(true);
         main.setSizeFull();
         grid.setSizeFull();
+        ventaGrid.setSizeFull();
+        
         main.setExpandRatio(grid, 1);
         
         HorizontalLayout cabecera = new HorizontalLayout();
         cabecera.setSpacing(true);
         
-        Button nuevoProducto = new Button(FontAwesome.CARET_RIGHT);
+        Button nuevoProducto = new Button(FontAwesome.PLUS);
         
         nuevoProducto.addClickListener(e -> {
         	if(!nuevoActivo){
@@ -81,7 +88,7 @@ public class MyUI extends UI {
         		form.setProducto(new Producto());
         		nuevoActivo=true;
         	}else{
-        		nuevoProducto.setIcon(FontAwesome.CARET_RIGHT);
+        		nuevoProducto.setIcon(FontAwesome.PLUS);
         		form.setVisible(false);
         		nuevoActivo=false;
         	}
@@ -98,7 +105,36 @@ public class MyUI extends UI {
         
         layout.setMargin(true);
         layout.setSpacing(true);
-        setContent(layout);
+        
+        ventaGrid.setColumns("facturaId", "productoId", "cantidadVendida", "precioUnitario");
+        Button realizarVenta = new Button("Realizar venta");
+        realizarVenta.setStyleName(ValoTheme.BUTTON_PRIMARY);
+       
+        Button cancelarVenta = new Button("Cancelar");
+        cancelarVenta.setStyleName(ValoTheme.BUTTON_DANGER);
+        
+        
+        VerticalLayout botonesVenta = new VerticalLayout(realizarVenta, cancelarVenta);
+        
+        botonesVenta.setSpacing(true);
+        botonesVenta.setSizeUndefined();
+        HorizontalLayout ventaContainer = new HorizontalLayout(ventaGrid,botonesVenta);
+        
+        ventaContainer.setExpandRatio(ventaGrid, 1);
+        ventaContainer.setSpacing(true);
+        ventaContainer.setMargin(true);
+        ventaContainer.setSizeFull();
+        
+        Label tituloProductos = new Label("Productos:");
+        Label tituloVenta = new Label("Venta:");
+        tituloProductos.setStyleName(ValoTheme.LABEL_LARGE);
+        tituloVenta.setStyleName(ValoTheme.LABEL_LARGE);
+        
+        VerticalLayout container = new VerticalLayout(tituloProductos, layout, tituloVenta, ventaContainer);
+        container.setMargin(true);
+       	container.setSpacing(true);
+       	
+        setContent(container);
         
         form.setVisible(false);
         
@@ -106,12 +142,17 @@ public class MyUI extends UI {
         	if(e.getSelected().isEmpty()){
         		form.setVisible(false);
         	}else{
-        		nuevoProducto.setIcon(FontAwesome.CARET_RIGHT);
+        		nuevoProducto.setIcon(FontAwesome.PLUS);
         		Producto Producto = (Producto) e.getSelected().iterator().next();
         		form.setProducto(Producto);
         		nuevoActivo = false;
         	}
         });
+    }
+    
+    public void updateVenta(){
+    	ArrayList<Venta> ventas = serviceProductos.getVenta();
+    	ventaGrid.setContainerDataSource(new BeanItemContainer<>(Venta.class,ventas));
     }
     
     public void updateList(){

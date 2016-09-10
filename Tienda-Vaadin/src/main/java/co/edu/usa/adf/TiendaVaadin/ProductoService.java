@@ -3,11 +3,13 @@ package co.edu.usa.adf.TiendaVaadin;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import co.edu.usa.adf.datos.Producto;
+import co.edu.usa.adf.datos.Venta;
 import co.edu.usa.adf.Framework_Ancho_Fijo_Anotaciones.franfia;
 
 public class ProductoService {
@@ -15,6 +17,7 @@ public class ProductoService {
 	private static ProductoService instance;
 	private static final Logger LOGGER = Logger.getLogger(ProductoService.class.getName());
 	private final HashMap<String, Producto> contacts = new HashMap<>();
+	private ArrayList<Venta> venta = new ArrayList<Venta>();
 	
 	private ProductoService() {
 	}
@@ -35,7 +38,7 @@ public class ProductoService {
 		ArrayList<Producto> arrayList = new ArrayList<>();
 		for (Producto contact : contacts.values()) {
 			try {
-				//--------
+				
 				boolean passesFilter = (stringFilter == null || stringFilter.isEmpty())	|| contact.toString().toLowerCase().contains(stringFilter.toLowerCase());
 				if (passesFilter) {
 					arrayList.add(contact.clone());
@@ -48,7 +51,7 @@ public class ProductoService {
 
 			@Override
 			public int compare(Producto o1, Producto o2) {
-				return (int) (o2.getProductoId().compareTo(o1.getProductoId()));
+				return (int) (o1.getProductoId().compareTo(o2.getProductoId()));
 			}
 		});
 		return arrayList;
@@ -70,7 +73,7 @@ public class ProductoService {
 
 			@Override
 			public int compare(Producto o1, Producto o2) {
-				return (int) (o2.getProductoId().compareTo(o1.getProductoId()));
+				return (int) (o1.getProductoId().compareTo(o2.getProductoId()));
 			}
 		});
 		int end = start + maxresults;
@@ -85,11 +88,13 @@ public class ProductoService {
 	}
 
 	public void delete(Producto value) {
-		System.out.println("Eliminando: "+value);
-		if(contacts.get(value.getProductoId())!=null){
-			contacts.remove(value.getProductoId());
-			System.out.println("Dato eliminado con exito!");
-		}
+		if(venta.isEmpty()){
+			System.out.println("Eliminando: "+value);
+			if(contacts.get(value.getProductoId())!=null){
+				contacts.remove(value.getProductoId());
+				System.out.println("Dato eliminado con exito!");
+			}
+		}	
 	}
 
 	public synchronized void save(Producto entry) {
@@ -132,7 +137,7 @@ public class ProductoService {
 			Collections.sort(productos, new Comparator<Producto>() {
 				@Override
 				public int compare(Producto o1, Producto o2) {
-					return (int) (o2.getProductoId().compareTo(o1.getProductoId()));
+					return (int) (o1.getProductoId().compareTo(o2.getProductoId()));
 				}
 			});
 			
@@ -146,5 +151,25 @@ public class ProductoService {
 	
 	public int datosSize(){
 		return contacts.size();
+	}
+	
+	public void agregarProductoVenta(Producto producto){
+		boolean exist = false;
+		for (int i = 0; i < venta.size(); i++) {
+			if(venta.get(i).getProductoId().equalsIgnoreCase(producto.getProductoId())){
+				exist=true;
+				if((venta.get(i).getCantidadVendida()+1)<=producto.getCantidadStock()){
+					venta.get(i).setCantidadVendida(venta.get(i).getCantidadVendida()+1);
+				}
+			}
+		}
+		if(!exist){
+			venta.add(new Venta("ABCDE12005", new Date(), producto.getProductoId(), 1, producto.getPrecioUnitario()));
+		}
+		System.out.println(venta);
+	}
+	
+	public ArrayList<Venta> getVenta(){
+		return venta;
 	}
 }

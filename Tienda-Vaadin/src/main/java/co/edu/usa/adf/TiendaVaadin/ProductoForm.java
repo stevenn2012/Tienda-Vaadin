@@ -1,18 +1,27 @@
 package co.edu.usa.adf.TiendaVaadin;
 
+import java.io.File;
+
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.event.ShortcutAction.KeyCode;
+import com.vaadin.server.ClassResource;
+import com.vaadin.server.FileResource;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.VaadinService;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Link;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import co.edu.usa.adf.datos.Producto;
 
 @SuppressWarnings("serial")
-public class ProductoForm extends FormLayout{
+public class ProductoForm extends HorizontalLayout{
 	
 	private TextField productoId = new TextField("Identificacion");
 	private TextField nombre = new TextField("Nombre");
@@ -30,30 +39,49 @@ public class ProductoForm extends FormLayout{
 	private Producto producto;
 	private MyUI myUI;
 	
+	private String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath()+"/Imagenes/";
+	private Image image;
+	private boolean imgInit = false;
 	public ProductoForm(MyUI myUI){
 		this.myUI=myUI;
 		
 		titulo.setStyleName(ValoTheme.LABEL_LARGE);
+
 		save.setStyleName(ValoTheme.BUTTON_FRIENDLY);
 		save.setClickShortcut(KeyCode.ENTER);
 		
 		precioUnitario.setStyleName(ValoTheme.LABEL_COLORED);
 		save.addClickListener(e -> save());
 		delete.addClickListener(e -> delete());
-		agregar.addClickListener(e -> prueba());
+		agregar.addClickListener(e -> agregarCarro());
 		
 		setSizeUndefined();
 		
 		CssLayout buttons = new CssLayout(save, delete, agregar);
 		buttons.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
 		
-		addComponents(titulo, productoId, nombre, descripcion, precioUnitario, cantidadStock, rutaImagen, buttons);
+		
+		FormLayout lay = new FormLayout(titulo, productoId, nombre, descripcion, precioUnitario, cantidadStock, rutaImagen, buttons);
+		lay.setMargin(false);
+		
+		addComponents(lay);
+		this.setSpacing(true);
+		this.setMargin(false);
 	}
 	
 	public void setProducto(Producto producto) {
 		this.producto = producto;
 		BeanFieldGroup.bindFieldsBuffered(producto, this);
 		delete.setVisible(producto.isPersisted());
+		if(imgInit){
+			this.removeComponent(image);
+		}else{
+			imgInit=true;
+		}
+		image = new Image("", new FileResource(new File(basepath+producto.getRutaImagen())));
+		image.setSizeFull();
+		image.setSizeUndefined();
+		this.addComponent(image);
 		setVisible(true);
 		nombre.selectAll();
 	}
@@ -100,7 +128,8 @@ public class ProductoForm extends FormLayout{
 		
 	}
 
-	private void prueba(){
-		System.out.println(service.datosSize());
+	private void agregarCarro(){
+		service.agregarProductoVenta(producto);
+		myUI.updateVenta();
 	}
 }
