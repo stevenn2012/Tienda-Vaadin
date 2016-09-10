@@ -1,3 +1,3 @@
 co.edu.usa.adf.datos.Producto
 Datos/Archivos/Productos.txt
-Datos/Generados/DatosProductos.txt
+Datos/Archivos/Productos.txt

@@ -106,13 +106,22 @@ public class MyUI extends UI {
         layout.setMargin(true);
         layout.setSpacing(true);
         
-        ventaGrid.setColumns("facturaId", "productoId", "cantidadVendida", "precioUnitario");
+        ventaGrid.setColumns("productoId", "cantidadVendida", "precioUnitario");
         Button realizarVenta = new Button("Realizar venta");
         realizarVenta.setStyleName(ValoTheme.BUTTON_PRIMARY);
+        realizarVenta.addClickListener(e -> {
+        	serviceProductos.realizarVenta();
+        	updateVenta();
+        	updateList();
+        });
        
         Button cancelarVenta = new Button("Cancelar");
         cancelarVenta.setStyleName(ValoTheme.BUTTON_DANGER);
-        
+        cancelarVenta.addClickListener(e -> {
+        	serviceProductos.cancelarVenta();
+        	updateVenta();
+        	updateList();
+        });
         
         VerticalLayout botonesVenta = new VerticalLayout(realizarVenta, cancelarVenta);
         

@@ -4,7 +4,6 @@ import java.io.File;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.server.ClassResource;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinService;
@@ -14,9 +13,9 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Link;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import co.edu.usa.adf.datos.Producto;
 
@@ -25,7 +24,7 @@ public class ProductoForm extends HorizontalLayout{
 	
 	private TextField productoId = new TextField("Identificacion");
 	private TextField nombre = new TextField("Nombre");
-	private TextField descripcion = new TextField("Descripcion");
+	private TextArea descripcion = new TextArea("Descripcion");
 	private TextField precioUnitario = new TextField("Precio Unitario");
 	private TextField cantidadStock = new TextField("Cantidad en Stock");
 	private TextField rutaImagen = new TextField("Ruta de imagen");
@@ -73,13 +72,15 @@ public class ProductoForm extends HorizontalLayout{
 		this.producto = producto;
 		BeanFieldGroup.bindFieldsBuffered(producto, this);
 		delete.setVisible(producto.isPersisted());
+		
 		if(imgInit){
 			this.removeComponent(image);
 		}else{
 			imgInit=true;
 		}
+		
 		image = new Image("", new FileResource(new File(basepath+producto.getRutaImagen())));
-		image.setSizeFull();
+		image.setSizeFull();;
 		image.setSizeUndefined();
 		this.addComponent(image);
 		setVisible(true);
@@ -98,11 +99,13 @@ public class ProductoForm extends HorizontalLayout{
 		producto.setCantidadStock(Integer.parseInt(cantidadStock.getValue()));
 		producto.setRutaImagen(rutaImagen.getValue());
 		
-		service.save(producto);
-		service.guardarDatos();
-		myUI.updateList();
-		setVisible(false);
-		System.out.println("Guardado con exito!");
+		if(service.save(producto)){
+			service.guardarDatos();
+			myUI.updateList();
+			setVisible(false);
+			System.out.println("Guardado con exito!");
+			Notification.show("Guardado Con exito!");
+		}
 		System.out.println("---------->");
 	}
 	
@@ -120,10 +123,11 @@ public class ProductoForm extends HorizontalLayout{
 		
 		producto.setRutaImagen(rutaImagen.getValue());
 		
-		service.delete(producto);
-		service.guardarDatos();
-		myUI.updateList();
-		setVisible(false);
+		if(service.delete(producto)){
+			service.guardarDatos();
+			myUI.updateList();
+			setVisible(false);
+		}
 		System.out.println("-------------->");
 		
 	}

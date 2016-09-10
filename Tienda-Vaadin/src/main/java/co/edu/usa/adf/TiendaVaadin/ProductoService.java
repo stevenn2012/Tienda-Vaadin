@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.vaadin.ui.Notification;
+
 import co.edu.usa.adf.datos.Producto;
 import co.edu.usa.adf.datos.Venta;
 import co.edu.usa.adf.Framework_Ancho_Fijo_Anotaciones.franfia;
@@ -87,27 +90,54 @@ public class ProductoService {
 		return contacts.size();
 	}
 
-	public void delete(Producto value) {
-		if(venta.isEmpty()){
+	public boolean delete(Producto value) {
+		boolean val = true;
+		for (int i = 0; i < venta.size(); i++) {
+			if(venta.get(i).getProductoId().equalsIgnoreCase(value.getProductoId())){
+				val=false;
+			}
+		}
+		if(val){
 			System.out.println("Eliminando: "+value);
 			if(contacts.get(value.getProductoId())!=null){
 				contacts.remove(value.getProductoId());
 				System.out.println("Dato eliminado con exito!");
+				Notification.show("Producto Eliminado Con Exito!");
+				return true;
+			}else{
+				Notification.show("No se encontro el producto a eliminar");
+				return false;
 			}
-		}	
+		}else{
+			Notification.show("No se puede eliminar el producto mientras se encuentre en la tabla de venta!");
+			return false;
+		}
 	}
 
-	public synchronized void save(Producto entry) {
-		if (entry == null) {
-			LOGGER.log(Level.SEVERE,"Producto is null.");
-			return;
+	public synchronized boolean save(Producto entry) {
+		boolean val = true;
+		for (int i = 0; i < venta.size(); i++) {
+			if(venta.get(i).getProductoId().equalsIgnoreCase(entry.getProductoId())){
+				val=false;
+			}
 		}
-		try {
-			entry = (Producto) entry.clone();
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
+		if(val){
+			if (entry == null) {
+				Notification.show("El producto es nulo");
+				LOGGER.log(Level.SEVERE,"Producto is null.");
+				return false;
+			}
+			try {
+				entry = (Producto) entry.clone();
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
+			}
+			contacts.put(entry.getProductoId(), entry);
+			return true;
+		}else{
+			Notification.show("No se puede editar este elemento mientras se encuentre en la tabla de venta!");
+			return false;
 		}
-		contacts.put(entry.getProductoId(), entry);
 	}
 
 	public void ensureTestData() {
@@ -164,12 +194,48 @@ public class ProductoService {
 			}
 		}
 		if(!exist){
-			venta.add(new Venta("ABCDE12005", new Date(), producto.getProductoId(), 1, producto.getPrecioUnitario()));
+			if(producto.getCantidadStock()>0){
+				venta.add(new Venta("ABCDE12005", new Date(), producto.getProductoId(), 1, producto.getPrecioUnitario()));
+			}else{
+				Notification.show("No se puede agregar este producto. No hay mas en stock");
+			}
 		}
 		System.out.println(venta);
 	}
 	
 	public ArrayList<Venta> getVenta(){
 		return venta;
+	}
+	
+	public void cancelarVenta(){
+		if(venta.size()>0){
+			venta.removeAll(venta);
+			Notification.show("Venta Cancelada con exito!");
+		}else{
+			Notification.show("EL carrito está Vacio");
+		}
+	}
+	
+	public void realizarVenta(){
+		if(venta.size()>0){
+			try {
+				franfia<Venta> escribirVenta = new franfia<Venta>("Datos/Descriptores/Descriptor_Venta.txt");
+				escribirVenta.leerArchivo();
+				Date fecha = new Date();
+				for (int i = 0; i < venta.size(); i++) {
+					venta.get(i).setFecha(fecha);
+					escribirVenta.add(venta.get(i));
+					contacts.get(venta.get(i).getProductoId()).setCantidadStock(contacts.get(venta.get(i).getProductoId()).getCantidadStock()-venta.get(i).getCantidadVendida());
+				}
+				guardarDatos();
+				escribirVenta.escribirArchivo(false);
+				venta.removeAll(venta);
+				Notification.show("Venta Realizada con exito!");
+			} catch (Exception e) {
+				System.out.println("Error Guardando venta"+ e);
+			}
+		}else{
+			Notification.show("El Carrito está vacio");
+		}
 	}
 }
