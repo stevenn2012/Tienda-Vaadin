@@ -36,7 +36,7 @@ public class MyUI extends UI {
 	
 	private ProductoService serviceProductos = ProductoService.getInstance();
 	
-	private Grid grid = new Grid();
+	public Grid grid = new Grid();
 	
 	private TextField filterText = new TextField();
 	public ProductoForm form = new ProductoForm(this);

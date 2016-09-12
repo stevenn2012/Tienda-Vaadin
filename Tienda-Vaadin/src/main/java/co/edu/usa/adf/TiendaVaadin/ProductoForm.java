@@ -63,6 +63,7 @@ public class ProductoForm extends HorizontalLayout{
 		cerrarVentana.addClickListener(e ->{
 			myUI.form.setVisible(false);
 			myUI.nuevoProducto.setIcon(FontAwesome.PLUS);
+			myUI.grid.deselect(myUI.grid.getSelectedRow());
 		});
 		
 		buttons.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
