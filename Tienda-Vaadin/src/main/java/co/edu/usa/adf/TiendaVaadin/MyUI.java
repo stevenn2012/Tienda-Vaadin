@@ -39,7 +39,7 @@ public class MyUI extends UI {
 	private Grid grid = new Grid();
 	
 	private TextField filterText = new TextField();
-	private ProductoForm form = new ProductoForm(this);
+	public ProductoForm form = new ProductoForm(this);
 
 	private  Grid ventaGrid = new Grid();
 	

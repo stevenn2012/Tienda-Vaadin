@@ -59,7 +59,13 @@ public class ProductoForm extends HorizontalLayout{
 		
 		setSizeUndefined();
 		
-		CssLayout buttons = new CssLayout(save, delete, agregar);
+		Button cerrarVentana = new Button(FontAwesome.CARET_LEFT);
+		CssLayout buttons = new CssLayout(save, delete, agregar, cerrarVentana);
+		
+		cerrarVentana.addClickListener(e ->{
+			myUI.form.setVisible(false);
+		});
+		
 		buttons.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
 		
 		
