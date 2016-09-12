@@ -2,10 +2,8 @@ package co.edu.usa.adf.TiendaVaadin;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.server.FileResource;
@@ -64,6 +62,7 @@ public class ProductoForm extends HorizontalLayout{
 		
 		cerrarVentana.addClickListener(e ->{
 			myUI.form.setVisible(false);
+			myUI.nuevoProducto.setIcon(FontAwesome.PLUS);
 		});
 		
 		buttons.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);

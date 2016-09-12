@@ -47,6 +47,8 @@ public class MyUI extends UI {
 	
 	private Venta productoEnVenta=null;
 	
+	public Button nuevoProducto = new Button();
+	
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         VerticalLayout layout = new VerticalLayout();
@@ -81,7 +83,7 @@ public class MyUI extends UI {
         HorizontalLayout cabecera = new HorizontalLayout();
         cabecera.setSpacing(true);
         
-        Button nuevoProducto = new Button(FontAwesome.PLUS);
+        nuevoProducto = new Button(FontAwesome.PLUS);
         
         nuevoProducto.addClickListener(e -> {
         	if(!nuevoActivo){
