@@ -45,6 +45,8 @@ public class MyUI extends UI {
 	
 	private boolean nuevoActivo = false;
 	
+	private Venta productoEnVenta=null;
+	
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         VerticalLayout layout = new VerticalLayout();
@@ -127,7 +129,19 @@ public class MyUI extends UI {
         
         botonesVenta.setSpacing(true);
         botonesVenta.setSizeUndefined();
-        HorizontalLayout ventaContainer = new HorizontalLayout(ventaGrid,botonesVenta);
+        
+        Button disminuirCantidadVenta = new Button("Disminuir");
+        Button quitarProductoVenta = new Button("Quitar");
+        
+        HorizontalLayout funcVenta = new HorizontalLayout(disminuirCantidadVenta, quitarProductoVenta);
+        funcVenta.setSpacing(true);
+        funcVenta.setMargin(false);
+        
+        VerticalLayout botonesVenta2 = new VerticalLayout(funcVenta, botonesVenta);
+        botonesVenta2.setSizeUndefined();
+        botonesVenta2.setSpacing(true);
+        
+        HorizontalLayout ventaContainer = new HorizontalLayout(ventaGrid,botonesVenta2);
         
         ventaContainer.setExpandRatio(ventaGrid, 1);
         ventaContainer.setSpacing(true);
@@ -156,6 +170,35 @@ public class MyUI extends UI {
         		form.setProducto(Producto);
         		nuevoActivo = false;
         	}
+        });
+        
+        funcVenta.setVisible(false);
+
+        ventaGrid.addSelectionListener(e ->{
+        	if(e.getSelected().isEmpty()){
+        		funcVenta.setVisible(false);
+        		productoEnVenta=null;
+        	}else{
+        		funcVenta.setVisible(true); 
+        		productoEnVenta = (Venta) e.getSelected().iterator().next();
+        		
+        	}
+        });
+        
+        disminuirCantidadVenta.addClickListener(e ->{
+          	if(productoEnVenta.getCantidadVendida()==1){
+          		serviceProductos.disminuirProducto(productoEnVenta);
+              	ventaGrid.select(productoEnVenta);
+          		updateVenta();
+          	}else{
+          		serviceProductos.disminuirProducto(productoEnVenta);
+              	ventaGrid.select(productoEnVenta);
+          	}
+        });
+        
+        quitarProductoVenta.addClickListener(e -> {
+        	serviceProductos.quitarProducto(productoEnVenta);
+        	updateVenta();
         });
     }
     

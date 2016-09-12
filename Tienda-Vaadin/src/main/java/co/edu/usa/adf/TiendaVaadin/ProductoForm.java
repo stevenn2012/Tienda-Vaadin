@@ -1,6 +1,10 @@
 package co.edu.usa.adf.TiendaVaadin;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -38,7 +42,6 @@ public class ProductoForm extends HorizontalLayout{
 	private Producto producto;
 	private MyUI myUI;
 	
-	private String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath()+"/Imagenes/";
 	private Image image;
 	private boolean imgInit = false;
 	public ProductoForm(MyUI myUI){
@@ -79,7 +82,13 @@ public class ProductoForm extends HorizontalLayout{
 			imgInit=true;
 		}
 		
-		image = new Image("", new FileResource(new File(basepath+producto.getRutaImagen())));
+		Path path = Paths.get(producto.getRutaImagen());
+		if(producto.getRutaImagen()==null || producto.getRutaImagen().isEmpty() || Files.notExists(path)){
+			image = new Image("", new FileResource(new File(VaadinService.getCurrent().getBaseDirectory().getAbsolutePath()+"/Imagenes/notExistImage.jpg")));
+		}else{
+			image = new Image("", new FileResource(new File(producto.getRutaImagen())));
+		}
+		
 		image.setSizeFull();;
 		image.setSizeUndefined();
 		this.addComponent(image);

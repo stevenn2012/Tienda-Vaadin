@@ -238,4 +238,32 @@ public class ProductoService {
 			Notification.show("El Carrito está vacio");
 		}
 	}
+	
+	public void disminuirProducto(Venta venta){
+		if(venta == null){
+			Notification.show("NO Ha seleccionado ningun producto");
+		}else{
+			for (int i = 0; i < this.venta.size(); i++) {
+				if(this.venta.get(i).getProductoId().equalsIgnoreCase(venta.getProductoId())){
+					if(this.venta.get(i).getCantidadVendida()==1){
+						this.venta.remove(i);
+					}else{
+						this.venta.get(i).setCantidadVendida(this.venta.get(i).getCantidadVendida()-1);
+					}
+				}
+			}
+		}
+	}
+	
+	public void quitarProducto(Venta venta){
+		if(venta == null){
+			Notification.show("NO Ha seleccionado ningun producto");
+		}else{
+			for (int i = 0; i < this.venta.size(); i++) {
+				if(this.venta.get(i).getProductoId().equalsIgnoreCase(venta.getProductoId())){
+					this.venta.remove(i);
+				}
+			}
+		}
+	}
 }
