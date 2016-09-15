@@ -1,3 +1,0 @@
-co.edu.usa.adf.tomates.Pelicula
-Datos/Archivos/Peliculas.txt
-Datos/Generados/Peliculas.txt

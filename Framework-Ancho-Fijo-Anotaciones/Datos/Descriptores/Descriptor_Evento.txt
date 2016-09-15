@@ -1,3 +1,0 @@
-co.edu.usa.adf.tomates.Evento
-Datos/Archivos/Eventos.txt
-Datos/Generados/datosEventos.txt

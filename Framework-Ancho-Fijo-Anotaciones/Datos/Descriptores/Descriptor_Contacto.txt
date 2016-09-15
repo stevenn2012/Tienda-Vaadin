@@ -1,3 +1,0 @@
-co.edu.usa.adf.tomates.Contacto
-Datos/Archivos/Contactos.txt
-Datos/Generados/datosContactos.txt

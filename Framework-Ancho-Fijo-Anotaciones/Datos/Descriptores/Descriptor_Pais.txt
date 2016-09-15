@@ -1,3 +1,0 @@
-co.edu.usa.adf.tomates.Pais
-Datos/Archivos/Paises.txt
-Datos/Generados/Paises.txt

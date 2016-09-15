@@ -1,17 +1,9 @@
 package co.edu.usa.adf.TiendaVaadin;
 
 import java.io.File;
-import java.io.OutputStream;
-import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileView;
-import javax.swing.plaf.FileChooserUI;
-
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.server.FileResource;
@@ -19,7 +11,6 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinService;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.Embedded;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
@@ -27,9 +18,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.Upload;
-import com.vaadin.ui.Upload.Receiver;
-import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 import co.edu.usa.adf.datos.Producto;
 
@@ -80,19 +68,7 @@ public class ProductoForm extends HorizontalLayout{
 		
 		buttons.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
 		
-		Button buscarFile = new Button("Buscar");
-		
-		
-		buscarFile.addClickListener(e ->{
-			/*File file = null;
-			Embedded image1 = new Embedded("Uploaded Image");
-			image.setVisible(false);
-			image1.setSource(new FileResource(file));
-			Upload filechooser = new Upload();
-			System.out.println( );*/
-		});
-		
-		FormLayout lay = new FormLayout(titulo, productoId, nombre, descripcion, precioUnitario, cantidadStock, rutaImagen, buscarFile, buttons);
+		FormLayout lay = new FormLayout(titulo, productoId, nombre, descripcion, precioUnitario, cantidadStock, rutaImagen, buttons);
 		
 		lay.setMargin(false);
 		

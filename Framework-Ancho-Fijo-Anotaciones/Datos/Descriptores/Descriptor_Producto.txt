@@ -1,3 +1,0 @@
-co.edu.usa.adf.tomates.Producto
-Datos/Archivos/Productos.txt
-Datos/Generados/DatosProductos.txt
